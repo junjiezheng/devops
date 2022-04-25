@@ -1,0 +1,9 @@
+*.project
+*.classpath
+.settings/
+.checkstyle
+target/
+*.tern-project
+.well-known/
+bin/
+data/
