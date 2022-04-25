@@ -1,10 +1,10 @@
 version: '3.1'
 services:
   devops:
-	build:
-	  context: ./
-	  dockerfile: dockerfile
-	image: devops:v1.0.0
-	container_name: devops
-	ports:
-	  - 8081:8080
+    build:
+      context: ./
+      dockerfile: dockerfile
+    image: devops:v1.0.0
+    container_name: devops
+    ports:
+      - 8081:8080
