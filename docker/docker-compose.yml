@@ -7,4 +7,4 @@ services:
     image: devops:v1.0.0
     container_name: devops
     ports:
-      - 8081:8080
+      - 8082:8080
