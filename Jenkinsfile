@@ -14,7 +14,7 @@ pipeline{
 		}
 		stage('通过maven构建项目'){
 			steps{
-				echo '通过maven构建项目-sucess'
+				sh '/var/jenkins_home/maven/bin/mvn clean package -Dmaven.test.skip=true -P${BUILD_ENV}'
 			}
 		}
 		stage('将自定义对像上传到目标服务器'){
