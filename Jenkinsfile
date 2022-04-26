@@ -14,7 +14,7 @@ pipeline{
 		}
 		stage('通过maven构建项目'){
 			steps{
-				sh '/var/jenkins_home/maven/bin/mvn clean package -Dmaven.test.skip=true -Pdev'
+				sh "/var/jenkins_home/maven/bin/mvn clean package -Dmaven.test.skip=true -P${BULID_ENV}"
 			}
 		}
 		stage('将自定义对像上传到目标服务器'){
