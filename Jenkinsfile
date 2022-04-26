@@ -8,7 +8,7 @@ pipeline{
 	stages{
 		stage('拉取git仓库代码'){
 			  steps{
-          echo 'From git branch:$GIT_BRANCH'
+          			  echo 'From git branch:$GIT_BRANCH'
 				  checkout([$class: 'GitSCM', branches: [[name: '*/$GIT_BRANCH']], extensions: [], 
                     userRemoteConfigs: [[credentialsId: 'f3c0ba02-def0-4846-af2a-682ce036d072', url: 'https://github.com/junjiezheng/devops.git']]])
 			  }
