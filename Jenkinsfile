@@ -14,7 +14,7 @@ pipeline{
 		}
 		stage('通过maven构建项目'){
 			steps{
-				sh "/var/jenkins_home/maven/bin/mvn clean package -Dmaven.test.skip=true -P${BULID_ENV}"
+				sh "/var/jenkins_home/maven/bin/mvn clean package -Dmaven.test.skip=true -P${BUILD_ENV}"
 			}
 		}
 		stage('将自定义对像上传到目标服务器'){
@@ -24,11 +24,15 @@ pipeline{
 		}
 		stage('通过Publish Over SSH通知目标服务器'){
 			steps{
-				sshPublisher(publishers: [sshPublisherDesc(configName: 'devops_dev', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd /usr/local/test/docker
-mv ../target/*.jar ./
-docker-compose down
-docker-compose up -d --build
-docker image prune -a -f''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'target/*.jar docker/*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+				sshPublisher paramPublish: [parameterName: 'BUILD_ENV'], publishers: [sshPublisherDesc(configName: 'devops_dev', sshLabel: [label: 'dev'], transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd /usr/local/test/docker
+                		mv ../target/*.jar ./
+                		docker-compose down
+                		docker-compose up -d --build
+                		docker image prune -a -f ''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'target/*.jar docker/*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false), sshPublisherDesc(configName: 'devops_prod', sshLabel: [label: 'prod'], transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd /usr/local/test/docker
+                		mv ../target/*.jar ./
+                		docker-compose down
+                		docker-compose up -d --build
+                		docker image prune -a -f ''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'target/*.jar docker/*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)]
 			}
 		}
 	}
