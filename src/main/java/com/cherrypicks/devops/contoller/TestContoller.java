@@ -24,6 +24,7 @@ public class TestContoller {
 		map.put("env", env);
 		map.put("staffName", "Rei.zheng");
 		map.put("operation", "Docker deploy test");
+	    	map.put("version", "2.0.0");
 		ResultVO<Map<String,Object>> output=new ResultVO<>();
 		output.setResult(map);
 		return output;
