@@ -1,30 +1,53 @@
 package com.cherrypicks.devops.vo;
 
-import java.io.Serializable;
+import com.cherrypicks.devops.enums.ExceptionEnum;
 
-public class ResultVO<T> implements Serializable{
+public class ResultVO<T> {
 	
-	private static final long serialVersionUID = 8691068281487714541L;
-	private T result;
-	private String statusCode = "0";
-	private String statusMessage = "";
-	
-	public T getResult() {
-		return result;
+    private T result;
+    private String errorCode = ExceptionEnum.SUCCESS.getCode();
+    private String errorMessage = "";
+
+    public static ResultVO<Object> info(Object result) {
+       return new ResultVO<>(result);
+    }
+    
+    public static ResultVO<String> error(String errorCode,String errorMessage) {
+        return new ResultVO<>(errorCode,errorMessage);
+     } 
+    
+    public ResultVO(T result){
+    	this.result=result;
+    }
+    
+    public ResultVO(String errorCode,String errorMessage){
+    	this.errorCode=errorCode;
+    	this.errorMessage=errorMessage;
+    }
+    
+    public T getResult() {
+        return result;
+    }
+    
+    public void setResult(final T result) {
+        this.result = result;
+    }
+
+	public String getErrorCode() {
+		return errorCode;
 	}
-	public void setResult(T result) {
-		this.result = result;
+
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
 	}
-	public String getStatusCode() {
-		return statusCode;
+
+	public String getErrorMessage() {
+		return errorMessage;
 	}
-	public void setStatusCode(String statusCode) {
-		this.statusCode = statusCode;
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
 	}
-	public String getStatusMessage() {
-		return statusMessage;
-	}
-	public void setStatusMessage(String statusMessage) {
-		this.statusMessage = statusMessage;
-	}
+    
+    
 }
