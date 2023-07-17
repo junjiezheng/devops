@@ -15,21 +15,22 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cherrypicks.devops.vo.ResultVO;
 
 @RestController
-public class TestContoller {
+public class TestContoller extends BaseController {	
 	
 	@Value("${env.name}")
 	private String env;
 	
-	@GetMapping(value="/index")
+	@GetMapping(value="/test")
     public ResultVO<Object> getDaDutyList(final HttpServletRequest request,final HttpServletResponse response,
     		@RequestParam(name="tag",required = false) String tag){
 		Assert.hasText(tag,"tag parameter invalid.");
 		Map<String,Object> map=new HashMap<>();
+		map.put("tag", tag);
 		map.put("env", env);
 		map.put("staffName", "Rei.zheng");
 		map.put("operation", "Docker deploy test");
 	    map.put("version", "2.0.0");
-		return ResultVO.info(map);
-     }
+	    return ResultVO.info(map);
+     }	
 	
 }

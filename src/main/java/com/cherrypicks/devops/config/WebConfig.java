@@ -9,8 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {
-			"com.cherrypicks.devops..controller"
-		})
+			"com.cherrypicks.deveops.service",
+			"com.cherrypicks.deveops.controller"})
 public class WebConfig implements WebMvcConfigurer {
 	
 	@Override

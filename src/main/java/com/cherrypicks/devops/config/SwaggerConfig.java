@@ -1,6 +1,8 @@
 package com.cherrypicks.devops.config;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +12,13 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -41,7 +48,9 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("com.cherrypicks.devops.contoller"))
                 .paths(PathSelectors.any())               
                 .build()                
-                .protocols(getProtocols("https", "http"));
+                .protocols(getProtocols("https", "http"))                
+                .securitySchemes(securitySchemes())                
+                .securityContexts(securityContexts());
      }
     
     private HashSet<String> getProtocols(String https, String http) {
@@ -49,6 +58,32 @@ public class SwaggerConfig {
         set.add(https);
         set.add(http);
         return set;
+    }
+    
+    private List<SecurityScheme> securitySchemes() {
+    	List<SecurityScheme> securitySchemes = new ArrayList<>();
+    	securitySchemes.add(
+    			new ApiKey("Authorization", "Authorization", "header"));
+    	return securitySchemes;
+    }
+  
+    private List<SecurityContext> securityContexts() {
+    	List<SecurityContext> securityContexts = new ArrayList<>();
+    	securityContexts.add(SecurityContext.builder()
+    			.securityReferences(defaultAuth())
+    			.forPaths(PathSelectors.regex("^((?!(/auth|/index)).)*$"))
+    			.build());
+    	return securityContexts;
+    }
+    
+    private List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope = new AuthorizationScope("read", "write");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        
+        List<SecurityReference> securityReferences = new ArrayList<>();
+        securityReferences.add(new SecurityReference("Authorization", authorizationScopes));
+        return securityReferences;
     }
     
     private ApiInfo apiInfo() {
