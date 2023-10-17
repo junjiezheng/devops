@@ -1,6 +1,7 @@
 package com.cherrypicks.devops.config;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,9 +35,9 @@ public class ExceptionHandlerConfig {
     	return ResultVO.error(ExceptionEnum.BAD_REQUEST.getCode(),ExceptionEnum.BAD_REQUEST.getMsg());
     }
     
-    @ExceptionHandler(value = IllegalArgumentException.class)
+    @ExceptionHandler(value = {IllegalArgumentException.class,UsernameNotFoundException.class})
     @ResponseBody
-    public ResultVO<String> exceptionHandler(IllegalArgumentException e) {
+    public ResultVO<String> exceptionHandler(UsernameNotFoundException e) {
     	String msg=e.getMessage();
     	String errorMsg=StringUtils.isNotBlank(msg)?msg:ExceptionEnum.IS_NOT_NULL.getMsg();
     	return ResultVO.error(ExceptionEnum.INTERNAL_SERVER_ERROR.getCode(),errorMsg);

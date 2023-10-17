@@ -47,7 +47,8 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.cherrypicks.devops.contoller"))
                 .paths(PathSelectors.any())               
-                .build()                
+                .build()
+                .pathMapping("/")
                 .protocols(getProtocols("https", "http"))                
                 .securitySchemes(securitySchemes())                
                 .securityContexts(securityContexts());
