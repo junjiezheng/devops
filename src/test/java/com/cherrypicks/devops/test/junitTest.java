@@ -2,14 +2,10 @@ package com.cherrypicks.devops.test;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.cherrypicks.devops.entity.UserInfo;
 import com.cherrypicks.devops.repository.UserInfoRepository;
@@ -33,16 +29,6 @@ public class junitTest {
 	    System.out.println("=====================================>"+JsonUtil.fromJSON(str1,UserInfo.class).toString());
 	    String str2=JsonUtil.toJson(user2);
 	    System.out.println("=====================================>"+JsonUtil.fromJSON(str2,UserInfo.class).toString());
-	}
-	
-	@Test
-	@DisplayName("Encrypt pwd")
-	public void testPwd() {
-		String pwd="123456";
-		BCryptPasswordEncoder bcryptPasswordEncoder=new BCryptPasswordEncoder();
-		String encoder=bcryptPasswordEncoder.encode(pwd);
-		boolean ischeck=bcryptPasswordEncoder.matches(pwd, encoder);
-		System.out.println("密码是否正确:"+ischeck);
 	}
 	
 	@Test

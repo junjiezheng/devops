@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="true">
+
+	<springProperty scope="context" name="springAppName" source="logging.app.name"/>
+	<springProperty scope="context" name="logstashHost" source="logging.logstash.host"/>
+	
 	<property name="pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] --- [%thread] %c %M %L : %m%n"/>
 	<property name="log_dir" value="/logs"/>
     <!--定义日志文件保存路径属性 Windows为当前项目所在的磁盘跟路径-->
@@ -100,15 +104,35 @@
             <charset>UTF-8</charset>
         </encoder>
     </appender>
-
-    <!--给定记录器的每个启用的日志记录请求都将转发到该记录器中的所有appender以及层次结构中较高的appender（不用在意level值）。
+    
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+    	<ssl>
+    		<!--  <keyStore>
+			    <location>classpath:client.jks</location> 
+			    <password>123456</password>
+			</keyStore> -->
+			<trustStore>
+    			<location>classpath:logstash.jks</location>
+    			<password>123456</password>
+  			</trustStore>
+  		</ssl>
+    	<destination>${logstashHost}</destination>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+        	<!--定义appname的名字是服务名,多服务时,根据这个进行区分日志-->
+            <customFields>{"project": "${springAppName}"}</customFields>
+        </encoder>
+    </appender>
+    
+    
+<!--给定记录器的每个启用的日志记录请求都将转发到该记录器中的所有appender以及层次结构中较高的appender（不用在意level值）。
     换句话说，appender是从记录器层次结构中附加地继承的。
     例如，如果将控制台appender添加到根记录器，则所有启用的日志记录请求将至少在控制台上打印。
     如果另外将文件追加器添加到记录器（例如L），则对L和L'子项启用的记录请求将打印在文件和控制台上。
     通过将记录器的additivity标志设置为false，可以覆盖此默认行为，以便不再添加appender累积-->
     <!-- configuration中最多允许一个root，别的logger如果没有设置级别则从父级别root继承 -->
-    <root level="debug">
+    <root level="info">
         <appender-ref ref="STDOUT" />
+        <appender-ref ref="LOGSTASH"/>
     </root>
 
 </configuration>

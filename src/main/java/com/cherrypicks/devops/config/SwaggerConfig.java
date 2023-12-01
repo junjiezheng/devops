@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
@@ -20,7 +21,6 @@ import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @author Rei.zheng
@@ -28,9 +28,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @fileName SwaggerConfig.java
  */
 @Configuration  //Swagger2配置类
-@EnableSwagger2 //开启Swagger2
-@Profile({"dev", "prod"})
+@EnableOpenApi //开启Swagger2
+@Profile({"local", "dev", "prod"})
 public class SwaggerConfig {
+	
+	public static final String HEADER_AUTHORIZATION="Authorization";
 	
 	/**
 	  * 创建API应用
@@ -41,17 +43,18 @@ public class SwaggerConfig {
      */
     @Bean
     public Docket docket() {
-    	return new Docket(DocumentationType.SWAGGER_2)
+    	return new Docket(DocumentationType.OAS_30)
+    			.enable(true)
     			.useDefaultResponseMessages(false)
     			.apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.cherrypicks.devops.contoller"))
+                .apis(RequestHandlerSelectors.basePackage("com.cherrypicks.devops.controller"))
                 .paths(PathSelectors.any())               
-                .build()
-                .pathMapping("/")
+                .build() 
                 .protocols(getProtocols("https", "http"))                
                 .securitySchemes(securitySchemes())                
                 .securityContexts(securityContexts());
+    	
      }
     
     private HashSet<String> getProtocols(String https, String http) {
@@ -62,17 +65,17 @@ public class SwaggerConfig {
     }
     
     private List<SecurityScheme> securitySchemes() {
-    	List<SecurityScheme> securitySchemes = new ArrayList<>();
+    	List<SecurityScheme> securitySchemes = new ArrayList<>(0);
     	securitySchemes.add(
-    			new ApiKey("Authorization", "Authorization", "header"));
+    			new ApiKey(HEADER_AUTHORIZATION, HEADER_AUTHORIZATION, "header"));
     	return securitySchemes;
     }
   
     private List<SecurityContext> securityContexts() {
-    	List<SecurityContext> securityContexts = new ArrayList<>();
+    	List<SecurityContext> securityContexts = new ArrayList<>(0);
     	securityContexts.add(SecurityContext.builder()
     			.securityReferences(defaultAuth())
-    			.forPaths(PathSelectors.regex("^((?!(/auth|/index)).)*$"))
+    			.operationSelector(operationContext -> true)
     			.build());
     	return securityContexts;
     }
@@ -82,16 +85,16 @@ public class SwaggerConfig {
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
         
-        List<SecurityReference> securityReferences = new ArrayList<>();
-        securityReferences.add(new SecurityReference("Authorization", authorizationScopes));
+        List<SecurityReference> securityReferences = new ArrayList<>(0);
+        securityReferences.add(new SecurityReference(HEADER_AUTHORIZATION, authorizationScopes));
         return securityReferences;
     }
     
     private ApiInfo apiInfo() {
     	Contact contact=new Contact("Cherrypicks","","");
         return new ApiInfoBuilder()
-                .title("DevOps API")
-                .description("Development test phase api")
+                .title("ELK")
+                .description("ELK backend api")
                 .termsOfServiceUrl("")
                 .contact(contact)
                 .version("1.0")

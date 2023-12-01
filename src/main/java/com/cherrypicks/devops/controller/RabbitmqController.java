@@ -1,4 +1,4 @@
-package com.cherrypicks.devops.contoller;
+package com.cherrypicks.devops.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +23,9 @@ import com.cherrypicks.devops.util.DateUtil;
 import com.cherrypicks.devops.util.JsonUtil;
 import com.cherrypicks.devops.vo.ResultVO;
 
+import springfox.documentation.annotations.ApiIgnore;
+
+@ApiIgnore
 @RestController
 public class RabbitmqController {
 	

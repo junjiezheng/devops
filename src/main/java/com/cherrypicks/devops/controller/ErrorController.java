@@ -1,4 +1,4 @@
-package com.cherrypicks.devops.contoller;
+package com.cherrypicks.devops.controller;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -43,12 +43,9 @@ public class ErrorController extends BasicErrorController{
         //输出自定义的Json格式
         Map<String, Object> map = new HashMap<>();
         map.put("result", "");
-        map.put("errorCode",ExceptionEnum.NOT_FOUND.getCode());
-        map.put("errorMessage", ExceptionEnum.NOT_FOUND.getMsg());
+        map.put("errorCode",ExceptionEnum.INTERNAL_SERVER_ERROR.getCode());
+        map.put("errorMessage", ExceptionEnum.INTERNAL_SERVER_ERROR.getMsg());
         return new ResponseEntity<>(map, HttpStatus.valueOf(200));
-    }
-	
-	
-	
+    }	
 	
 }

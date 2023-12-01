@@ -1,4 +1,4 @@
-package com.cherrypicks.devops.contoller;
+package com.cherrypicks.devops.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cherrypicks.devops.vo.ResultVO;
 
+import springfox.documentation.annotations.ApiIgnore;
+
+@ApiIgnore
 @RestController
 public class TestContoller extends BaseController {	
 	
@@ -21,7 +24,7 @@ public class TestContoller extends BaseController {
 	private String env;
 	
 	@GetMapping(value="/test")
-    public ResultVO<Object> getDaDutyList(final HttpServletRequest request,final HttpServletResponse response,
+    public ResultVO<Object> test(final HttpServletRequest request,final HttpServletResponse response,
     		@RequestParam(name="tag",required = false) String tag){
 		Assert.hasText(tag,"tag parameter invalid.");
 		Map<String,Object> map=new HashMap<>();
@@ -31,6 +34,8 @@ public class TestContoller extends BaseController {
 		map.put("operation", "Docker deploy test");
 	    map.put("version", "2.0.0");
 	    return ResultVO.info(map);
-     }	
+     }
+	
+	
 	
 }
